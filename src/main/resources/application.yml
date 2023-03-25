@@ -1,0 +1,5 @@
+mongo:
+  url: mongodb://docker:mongopw@localhost:49153
+
+server:
+  port: 9090
