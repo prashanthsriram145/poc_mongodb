@@ -1,13 +1,15 @@
 package com.prashanth.poc.mongodbpoc.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prashanth.poc.mongodbpoc.model.Employee;
 import com.prashanth.poc.mongodbpoc.service.MongoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class MongoController {
@@ -21,4 +23,19 @@ public class MongoController {
     public void saveEmployee(@RequestBody Employee employee) {
         mongoService.saveEmployee(employee);
     }
+
+    @GetMapping(value = "/findEmployee")
+    public ResponseEntity<Employee> findEmployee(@RequestParam String firstName, @RequestParam String lastName) {
+        Employee employee = mongoService.findEmployee(firstName, lastName);
+        return ResponseEntity.ok(employee);
+    }
+
+    @PostMapping(value = "/updateEmployee")
+    public ResponseEntity<Employee> updateEmployee(@RequestBody String employee) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readValue(employee, JsonNode.class);
+        Employee updatedEmployee = mongoService.updateEmployee(jsonNode.get("firstName").asText(), jsonNode.get("lastName").asText(), jsonNode.get("newLastName").asText());
+        return ResponseEntity.ok(updatedEmployee);
+    }
+
 }

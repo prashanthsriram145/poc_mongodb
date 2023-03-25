@@ -15,4 +15,11 @@ public class MongoService {
         return mongoDao.saveEmployee(employee);
     }
 
+    public Employee findEmployee(String firstName, String lastName) {
+        return mongoDao.findEmployee(firstName, lastName);
+    }
+
+    public Employee updateEmployee(String firstName, String lastName, String newLastName) {
+        return mongoDao.updateEmployee(firstName, lastName, newLastName);
+    }
 }
