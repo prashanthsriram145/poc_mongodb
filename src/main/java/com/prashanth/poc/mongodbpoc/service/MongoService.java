@@ -2,8 +2,11 @@ package com.prashanth.poc.mongodbpoc.service;
 
 import com.prashanth.poc.mongodbpoc.dao.MongoDao;
 import com.prashanth.poc.mongodbpoc.model.Employee;
+import com.prashanth.poc.mongodbpoc.model.EmployeeCountBySalary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class MongoService {
@@ -21,5 +24,13 @@ public class MongoService {
 
     public Employee updateEmployee(String firstName, String lastName, String newLastName) {
         return mongoDao.updateEmployee(firstName, lastName, newLastName);
+    }
+
+    public List<Employee> getEmployeeByAggregation(String firstName) {
+        return mongoDao.getEmployeeByAggregation(firstName);
+    }
+
+    public List<EmployeeCountBySalary> getEmployeesCountBySalaryAggregation() {
+        return mongoDao.getEmployeesCountBySalaryAggregation();
     }
 }

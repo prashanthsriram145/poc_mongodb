@@ -14,9 +14,18 @@ public class Employee {
     private String firstName;
     private String lastName;
     private String middleName;
+    private Double salary;
 
     public String getEmployeeId() {
         return employeeId;
+    }
+
+    public Double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(Double salary) {
+        this.salary = salary;
     }
 
     public void setEmployeeId(String employeeId) {
