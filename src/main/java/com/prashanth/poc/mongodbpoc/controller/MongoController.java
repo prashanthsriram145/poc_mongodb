@@ -53,4 +53,13 @@ public class MongoController {
         return ResponseEntity.ok(employeeCountBySalaries);
     }
 
+    @PostMapping("/executeNonNativeTransaction")
+    public void executeNonNativeTransaction() {
+        mongoService.executeNonNativeTransaction();
+    }
+
+    @PostMapping("/executeSynchronousTransaction")
+    public void executeSynchronousTransaction() {
+        mongoService.executeSynchronousTransaction();
+    }
 }

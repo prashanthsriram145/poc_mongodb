@@ -1,17 +1,22 @@
 package com.prashanth.poc.mongodbpoc.dao;
 
-import com.mongodb.client.result.UpdateResult;
+import com.prashanth.poc.mongodbpoc.model.Address;
 import com.prashanth.poc.mongodbpoc.model.Employee;
 import com.prashanth.poc.mongodbpoc.model.EmployeeCountBySalary;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.List;
 
@@ -23,6 +28,9 @@ public class MongoDao {
 
     @Autowired
     private MongoTemplate mongoTemplate;
+
+    @Autowired
+    private MongoTransactionManager mongoTransactionManager;
 
     public boolean saveEmployee(Employee employee) {
         mongoTemplate.save(employee);
@@ -59,5 +67,22 @@ public class MongoDao {
 
         AggregationResults<EmployeeCountBySalary> result = mongoTemplate.aggregate(aggregation, "employee", EmployeeCountBySalary.class);
         return result.getMappedResults();
+    }
+
+    public void executeNonNativeTransaction() {
+        TransactionTemplate transactionTemplate = new TransactionTemplate(mongoTransactionManager);
+        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(TransactionStatus status) {
+                mongoTemplate.insert(new Employee(), "employee");
+                mongoTemplate.insert(new Address(), "address");
+            }
+        });
+    }
+
+    @Transactional
+    public void executeSynchronousTransaction() {
+        mongoTemplate.insert(new Employee(), "employee");
+        mongoTemplate.insert(new Address(), "address");
     }
 }

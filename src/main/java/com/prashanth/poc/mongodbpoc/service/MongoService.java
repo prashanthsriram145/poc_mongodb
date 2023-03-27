@@ -33,4 +33,12 @@ public class MongoService {
     public List<EmployeeCountBySalary> getEmployeesCountBySalaryAggregation() {
         return mongoDao.getEmployeesCountBySalaryAggregation();
     }
+
+    public void executeNonNativeTransaction() {
+        mongoDao.executeNonNativeTransaction();
+    }
+
+    public void executeSynchronousTransaction() {
+        mongoDao.executeSynchronousTransaction();
+    }
 }
