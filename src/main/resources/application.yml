@@ -1,5 +1,5 @@
 mongo:
-  url: mongodb://docker:mongopw@localhost:49153
+  url: mongodb://docker:mongopw@localhost:49153/?retryWrites=false
 
 server:
   port: 9090
